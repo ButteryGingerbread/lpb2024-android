@@ -5,6 +5,6 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface ApiService {
-    @POST("login")  // This matches the path defined in your Django urls.py
+    @POST("/user/login")
     Call<LoginResponse> loginUser(@Body LoginRequest loginRequest);
 }

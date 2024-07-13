@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,15 +76,18 @@ public class LoginFragment extends Fragment {
                     }
                 } else {
                     Toast.makeText(getContext(), "Failed to login", Toast.LENGTH_SHORT).show();
+                    Log.e("LoginError", "Response Code: " + response.code() + ", Response Message: " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("LoginError", "Error: " + t.getMessage(), t);
             }
         });
     }
+
 
 
 
