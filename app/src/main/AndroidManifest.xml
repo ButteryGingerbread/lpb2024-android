@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+
 
     <application
         android:allowBackup="true"
@@ -13,9 +20,11 @@
         android:theme="@style/Theme.LPB2024"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".DisplayAllActivity"
+            android:name=".menu_item"
             android:exported="false" />
-
+        <activity
+            android:name=".DisplayAllActivity"
+            android:exported="true" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">

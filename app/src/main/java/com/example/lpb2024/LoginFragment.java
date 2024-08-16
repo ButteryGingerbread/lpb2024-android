@@ -16,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import retrofit2.Call;
@@ -67,8 +69,10 @@ public class LoginFragment extends Fragment {
                         Toast.makeText(getContext(), loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
 
                         // Navigate to HomeFragment on successful login
-                        NavHostFragment.findNavController(LoginFragment.this)
-                                .navigate(R.id.action_loginFragment_to_homeFragment);
+                        NavController navController = NavHostFragment.findNavController(LoginFragment.this);
+                        navController.navigate(R.id.action_loginFragment_to_homeFragment, null,
+                                new NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build());
+
 
                     } else {
                         Toast.makeText(getContext(), loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
@@ -87,9 +91,6 @@ public class LoginFragment extends Fragment {
             }
         });
     }
-
-
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

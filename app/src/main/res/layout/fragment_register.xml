@@ -111,9 +111,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter your Birth Date (dd/mm/yyyy)"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:layout_below="@id/password2"
-            android:inputType="date"
+            android:inputType="text"
             android:layout_marginTop="10dp"
             android:layout_marginRight="25dp"
             android:layout_marginLeft="25dp"
@@ -121,17 +121,28 @@
             android:textColor="@android:color/black"
             android:paddingVertical="10dp"/>
 
-        <EditText
-            android:id="@+id/weight"
+
+        <TextView
+            android:id="@+id/gendertext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Weight"
-            android:textSize="18dp"
-            android:layout_below="@id/birth_date"
-            android:inputType="number"
+            android:text="Select your gender:"
+            android:textSize="16dp"
             android:layout_marginTop="10dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginLeft="28dp"
+            android:layout_below="@id/birth_date"
+            android:fontFamily="sans-serif"
+            android:textColor="@android:color/black"/>
+
+        <Spinner
+            android:id="@+id/gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/gendertext"
             android:layout_marginRight="25dp"
             android:layout_marginLeft="25dp"
+            android:layout_marginTop="10px"
             android:background="@android:color/darker_gray"
             android:textColor="@android:color/black"
             android:paddingVertical="10dp"/>
@@ -145,7 +156,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="28dp"
             android:layout_marginLeft="28dp"
-            android:layout_below="@id/weight"
+            android:layout_below="@id/gender"
             android:fontFamily="sans-serif"
             android:textColor="@android:color/black"/>
 

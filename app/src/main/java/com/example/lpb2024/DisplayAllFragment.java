@@ -1,51 +1,82 @@
+// DisplayAllFragment.java
 package com.example.lpb2024;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DisplayAllFragment extends Fragment {
 
-    private LinearLayout menuSection;
+    private RecyclerView menuRecyclerView;
+    private MenuAdapter menuAdapter;
+    private List<Menu> menus = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_display_all, container, false);
+        menuRecyclerView = rootView.findViewById(R.id.menuRecyclerView);
+        menuRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2)); // 2 columns
 
-        menuSection = rootView.findViewById(R.id.menu);
+        // Initialize adapter with click listener
+        menuAdapter = new MenuAdapter(getActivity(), menus, this::onMenuClick);
+        menuRecyclerView.setAdapter(menuAdapter);
 
-        // Populate section with sample data
-        addMenuItemToSection("Menu 1", R.drawable.sample_image);
-        addMenuItemToSection("Menu 2", R.drawable.sample_image);
-        addMenuItemToSection("Menu 3", R.drawable.sample_image);
-        addMenuItemToSection("Menu 4", R.drawable.sample_image);
-        addMenuItemToSection("Menu 5", R.drawable.sample_image);
+        fetchMenus();
 
         return rootView;
     }
 
-    private void addMenuItemToSection(String title, int imageResId) {
-        LayoutInflater inflater = LayoutInflater.from(getActivity()); // Use getActivity() for fragment context
-        View menuItemView = inflater.inflate(R.layout.card_menu_item, menuSection, false);
+    private void fetchMenus() {
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<MenuResponse> call = apiService.getAllMenus();
 
-        ImageView menuImage = menuItemView.findViewById(R.id.menuImage);
-        TextView menuTitle = menuItemView.findViewById(R.id.menuTitle);
+        call.enqueue(new Callback<MenuResponse>() {
+            @Override
+            public void onResponse(Call<MenuResponse> call, Response<MenuResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    menus = response.body().getMenus(); // Get the list of menus from the response
+                    menuAdapter = new MenuAdapter(getActivity(), menus, DisplayAllFragment.this::onMenuClick);
+                    menuRecyclerView.setAdapter(menuAdapter);
+                } else {
+                    Toast.makeText(getActivity(), "Failed to retrieve menus", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        menuImage.setImageResource(imageResId);
-        menuTitle.setText(title);
-
-        menuSection.addView(menuItemView);
-
-        menuItemView.setOnClickListener(view -> Toast.makeText(getActivity(), title + " clicked", Toast.LENGTH_SHORT).show());
+            @Override
+            public void onFailure(Call<MenuResponse> call, Throwable t) {
+                Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
+    private void onMenuClick(Menu menu) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("menu_id", menu.getId());
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        navController.navigate(R.id.action_displayAllFragment_to_singleMenuFragment, bundle);
+    }
+
+
 }
+
+
+
+
