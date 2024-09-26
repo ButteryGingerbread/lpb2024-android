@@ -41,12 +41,26 @@
                 android:textAlignment="center"/>
         </LinearLayout>
 
+        <Button
+            android:id="@+id/customerButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/black"
+            android:backgroundTint="@android:color/white"
+            android:elevation="40dp"
+            android:padding="50px"
+            android:layout_below="@id/buttonContainer"
+            android:layout_centerHorizontal="true"
+            android:text="Customers"
+            android:textAlignment="center"/>
+
         <!-- Sections Container -->
         <LinearLayout
             android:id="@+id/sectionsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/buttonContainer"
+            android:layout_below="@id/customerButton"
             android:orientation="vertical"
             android:padding="10dp">
 

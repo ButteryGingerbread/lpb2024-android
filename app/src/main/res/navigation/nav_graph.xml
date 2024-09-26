@@ -32,7 +32,11 @@
             app:destination="@id/displayAllFragment" />
         <action
             android:id="@+id/action_homeFragment_to_blankFragment"
-            app:destination="@id/emptyFragment" />
+            app:destination="@id/blankFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_customerFragment"
+            app:destination="@id/customerFragment" />
+
     </fragment>
 
     <fragment
@@ -50,7 +54,7 @@
         android:label="Single Menu">
         <!-- Optional arguments -->
         <argument
-            android:name="menu_id"
+            android:name="recipe_id"
             app:argType="integer" />
     </fragment>
 
@@ -58,4 +62,21 @@
         android:id="@+id/emptyFragment"
         android:name="com.example.lpb2024.BlankFragment"
         android:label="Empty Fragment" />
+
+
+    <fragment
+        android:id="@+id/customerFragment"
+        android:name="com.example.lpb2024.CustomerFragment"
+        android:label="Customers"
+        tools:layout="@layout/fragment_customer" />
+
+    <fragment
+        android:id="@+id/blankFragment"
+        android:name="com.example.lpb2024.BlankFragment"
+        android:label="Blank Fragment">
+        <action
+            android:id="@+id/action_blankFragment_to_singleMenuFragment"
+            app:destination="@id/singleMenuFragment" />
+    </fragment>
+
 </navigation>

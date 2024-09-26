@@ -1,21 +1,26 @@
 package com.example.lpb2024;
 
-public class RegisterRequest {
-    private String username;
-    private String email;
-    private String password;
-    private String birth_date;
-    private String gender;
-    private String condition;
+import com.google.gson.annotations.SerializedName;
 
-    public RegisterRequest(String username, String email, String password, String birth_date, String gender, String condition) {
+public class RegisterRequest {
+    @SerializedName("username")
+    private String username;
+
+    @SerializedName("email")
+    private String email;
+
+    @SerializedName("password1")
+    private String password1;
+
+    @SerializedName("password2")
+    private String password2;
+
+    public RegisterRequest(String username, String email, String password1, String password2) {
         this.username = username;
         this.email = email;
-        this.password = password;
-        this.birth_date = birth_date;
-        this.gender = gender;
-        this.condition = condition;
+        this.password1 = password1;
+        this.password2 = password2;
     }
 
-    // Getters and setters (if needed)
+    // Getters and setters can be added here if needed
 }

@@ -1,6 +1,7 @@
 package com.example.lpb2024;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,62 +21,69 @@ import retrofit2.Response;
 
 public class singleMenuFragment extends Fragment {
 
-    private static final String ARG_MENU_ID = "menu_id";
-    private TextView menuTitle;
-    private TextView menuIngredients;
-    private TextView menuInstructions;
-    private ImageView menuImage;
-
-    public static singleMenuFragment newInstance(int menuId) {
-        singleMenuFragment fragment = new singleMenuFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_MENU_ID, menuId);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private TextView recipeNameTextView;
+    private TextView menuIngredientsTextView;
+    private TextView menuInstructionsTextView;
+    private ImageView recipeImageView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_single_menu, container, false);
-        menuTitle = rootView.findViewById(R.id.menuTitle);
-        menuIngredients = rootView.findViewById(R.id.menuIngredients);
-        menuInstructions = rootView.findViewById(R.id.menuInstructions);
-        menuImage = rootView.findViewById(R.id.menuImage);
 
-        if (getArguments() != null) {
-            int menuId = getArguments().getInt(ARG_MENU_ID);
-            fetchMenuDetails(menuId);
+        recipeNameTextView = rootView.findViewById(R.id.menuName);
+        menuIngredientsTextView = rootView.findViewById(R.id.menuIngredients);
+        menuInstructionsTextView = rootView.findViewById(R.id.menuInstructions);
+        recipeImageView = rootView.findViewById(R.id.menuImage);
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            int recipeId = bundle.getInt("recipe_id");
+            fetchRecipeDetails(recipeId);
         }
 
         return rootView;
     }
 
-    private void fetchMenuDetails(int menuId) {
+    private void fetchRecipeDetails(int recipeId) {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<Menu> call = apiService.getMenuById(menuId);
-
-        call.enqueue(new Callback<Menu>() {
+        Call<Recipe> call = apiService.getRecipeById(recipeId);
+        call.enqueue(new Callback<Recipe>() {
             @Override
-            public void onResponse(Call<Menu> call, Response<Menu> response) {
+            public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Menu menu = response.body();
-                    menuTitle.setText(menu.getMenuName());
-                    menuIngredients.setText(menu.getMenuIngredients());
-                    menuInstructions.setText(menu.getMenuInstructions());
+                    Recipe recipe = response.body();
+                    recipeNameTextView.setText(recipe.getMenuName());
 
-                    // Load the image using Glide
-                    Glide.with(getActivity())
-                            .load(menu.getMenuImage())
-                            .into(menuImage);
+                    String[] ingredientsArray = recipe.getMenuIngredients().split(",");
+                    StringBuilder formattedIngredients = new StringBuilder("<b>Ingredients:</b><br>");
+                    for (String ingredient : ingredientsArray) {
+                        formattedIngredients.append("- ").append(ingredient.trim()).append("<br>");
+                    }
+
+                    String[] instructionsArray = recipe.getMenuInstructions().split("\n");
+                    StringBuilder formattedInstructions = new StringBuilder("<b>Instructions:</b><br>");
+                    int step = 1;
+                    for (String instruction : instructionsArray) {
+                        formattedInstructions.append(step).append(". ").append(instruction.trim()).append("<br>");
+                        step++;
+                    }
+
+                    menuIngredientsTextView.setText(Html.fromHtml(formattedIngredients.toString()));
+                    menuInstructionsTextView.setText(Html.fromHtml(formattedInstructions.toString()));
+
+                    Glide.with(getContext())
+                            .load(recipe.getMenuImage())
+                            .into(recipeImageView);
                 } else {
-                    Toast.makeText(getActivity(), "Failed to retrieve menu details", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Recipe not found", Toast.LENGTH_SHORT).show();
                 }
             }
 
+
             @Override
-            public void onFailure(Call<Menu> call, Throwable t) {
-                Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<Recipe> call, Throwable t) {
+                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

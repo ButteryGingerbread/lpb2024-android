@@ -14,31 +14,36 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder> {
+public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
     private List<Recipe> recipes;
     private Context context;
-    private OnMenuClickListener onMenuClickListener;
+    private OnRecipeClickListener onRecipeClickListener;
 
-    public MenuAdapter(Context context, List<Recipe> recipes, OnMenuClickListener onMenuClickListener) {
+    public RecipeAdapter(Context context, List<Recipe> recipes, OnRecipeClickListener onRecipeClickListener) {
         this.context = context;
         this.recipes = recipes;
-        this.onMenuClickListener = onMenuClickListener;
+        this.onRecipeClickListener = onRecipeClickListener;
     }
 
     @NonNull
     @Override
-    public MenuViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.card_menu_item, parent, false);
-        return new MenuViewHolder(view);
+        return new RecipeViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MenuViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
         holder.menuTitleTextView.setText(recipe.getMenuName());
-        Glide.with(context).load(recipe.getMenuImage()).into(holder.menuImageView);
 
-        holder.itemView.setOnClickListener(v -> onMenuClickListener.onMenuClick(recipe));
+        String imageUrl = recipe.getMenuImage();
+        Glide.with(context)
+                .load(imageUrl)
+                .placeholder(R.drawable.sample_image)
+                .into(holder.menuImageView);
+
+        holder.itemView.setOnClickListener(v -> onRecipeClickListener.onRecipeClick(recipe));
     }
 
     @Override
@@ -52,18 +57,19 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder
         notifyDataSetChanged();
     }
 
-    public interface OnMenuClickListener {
-        void onMenuClick(Recipe recipe);
+    public interface OnRecipeClickListener {
+        void onRecipeClick(Recipe recipe);
     }
 
-    public static class MenuViewHolder extends RecyclerView.ViewHolder {
+    public static class RecipeViewHolder extends RecyclerView.ViewHolder {
         TextView menuTitleTextView;
         ImageView menuImageView;
 
-        public MenuViewHolder(@NonNull View itemView) {
+        public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             menuTitleTextView = itemView.findViewById(R.id.menuTitle);
             menuImageView = itemView.findViewById(R.id.menuImage);
         }
     }
 }
+

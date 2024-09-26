@@ -3,13 +3,9 @@ package com.example.lpb2024;
 import java.util.List;
 
 public class MenuResponse {
-    private List<Menu> menus;
+    private List<Recipe> menus;
 
-    public List<Menu> getMenus() {
+    public List<Recipe> getMenus() {
         return menus;
-    }
-
-    public void setMenus(List<Menu> menus) {
-        this.menus = menus;
     }
 }

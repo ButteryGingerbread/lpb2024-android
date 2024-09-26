@@ -6,16 +6,18 @@
         Don\'t have an account? <a href=""> Sign Up! </a>
     </string>
 
-    <string-array name="gender_array">
-        <item>male</item>
-        <item>female</item>
-        <item>other</item>
-    </string-array>
-    <string-array name="condition_array">
-        <item>autism</item>
+    <string-array name="conditions_array">
         <item>diabetes</item>
-        <item>low-sodium</item>
         <item>gluten-free</item>
+        <item>low-sodium</item>
+        <item>autism</item>
+    </string-array>
+
+    <string-array name="condition_array">
+        <item>Autism</item>
+        <item>Diabetes</item>
+        <item>Low-sodium</item>
+        <item>Gluten-free</item>
     </string-array>
 
 </resources>

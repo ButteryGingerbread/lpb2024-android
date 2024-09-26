@@ -15,13 +15,18 @@ public interface ApiService {
     @POST("/user/register/")
     Call<RegisterResponse> registerUser(@Body RegisterRequest registerRequest);
 
-    @GET("/menu/display-all/")
-    Call<MenuResponse> getAllMenus();
-
-
     @GET("/menu/menu-detail/{menu_id}/")
-    Call<Menu> getMenuById(@Path("menu_id") int menuId);
+    Call<Recipe> getRecipeById(@Path("menu_id") int id);
 
-    @GET("/menu/display-data/{menu_category}/")
-    Call<List<Menu>> getMenusByCategory(@Path("menu_category") String menuCategory);
+    @GET("/menu/display-data/{menu_category}")
+    Call<List<Recipe>> getRecipesByCondition(@Path("menu_category") String condition);
+
+    @POST("/customer/create/")
+    Call<CustomerResponse> createCustomer(@Body CustomerRequest customerRequest);
+
+    @GET("/customer/list/")
+    Call<List<Customer>> getCustomers();
+
+    @POST("/ingredients/filter-recipes/")
+    Call<List<Recipe>> getFilteredRecipes(@Body ScannedDataRequest request);
 }

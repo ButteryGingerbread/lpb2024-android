@@ -50,7 +50,7 @@ public class LoginFragment extends Fragment {
                 if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
                     login(email, password);
                 } else {
-                    Toast.makeText(getContext(), "Email and password are required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Email and password are required", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -66,27 +66,23 @@ public class LoginFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
                     if (loginResponse.isStatus()) {
-                        Toast.makeText(getContext(), loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
-
-                        // Navigate to HomeFragment on successful login
+                        Toast.makeText(requireContext(), loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
                         NavController navController = NavHostFragment.findNavController(LoginFragment.this);
                         navController.navigate(R.id.action_loginFragment_to_homeFragment, null,
                                 new NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build());
 
-
                     } else {
-                        Toast.makeText(getContext(), loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                        // Handle unsuccessful login
+                        Toast.makeText(requireContext(), loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getContext(), "Failed to login", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Failed to login", Toast.LENGTH_SHORT).show();
                     Log.e("LoginError", "Response Code: " + response.code() + ", Response Message: " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("LoginError", "Error: " + t.getMessage(), t);
             }
         });
@@ -106,7 +102,6 @@ public class LoginFragment extends Fragment {
             }
         };
 
-        // Set clickable span on textview
         SpannableString spannableString = new SpannableString(text);
         spannableString.setSpan(clickableSpan, 23, 35, 0);
         tvRegister.setText(spannableString);
